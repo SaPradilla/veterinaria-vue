@@ -56,7 +56,7 @@ const router = createRouter({
     },{
       path:'/agregar-mascota',
       name:'agregar-mascota',
-      component: () => import('../views/NuevoUsuarioView.vue'),
+      component: () => import('../views/NuevoMascotaView.vue'),
       props: { titulo: 'Agregar Mascota' }
     }
   ]

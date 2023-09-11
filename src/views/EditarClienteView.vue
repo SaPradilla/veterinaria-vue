@@ -22,7 +22,6 @@
 
     onMounted(() => {
         ClienteService.obtenerCliente(id)
-
             .then((respuesta) => {
                 // formData.nombre =respuesta.data.Cliente.nombre
                 Object.assign(formData,respuesta.data.Cliente[0])

@@ -1,21 +1,40 @@
 <script setup>
+    import { onMounted, ref, computed } from 'vue'
+   
     import { FormKit } from '@formkit/vue'
     import { useRouter } from 'vue-router'
-    import UsuarioService from '../services/UsuarioService';
+    import ClienteService from '../services/ClienteService'
+    import mascotaService from '../services/MascotaService';
     import RouterLink from '../components/UI/RouterLink.vue';
     import Heading from '../components/UI/Heading.vue';
+   
 
     const router = useRouter()
 
+    const clientes = ref([])
+    const newCliente = ref([])
+
+    onMounted(() => {
+        ClienteService.obtenerClientes()
+            .then((respuesta) => clientes.value = respuesta.data.Cliente)
+            .catch(error => console.log('Hubo un error'))
+    })
+    
     defineProps({
         titulo: {
             type: String
         }
     })
+    // Buscar cliente
+    const buscarCliente = (nombre)=>{
+        const nombreCliente = clientes.filter((ciente) => clientes.value.nombre === nombre)
+        newCliente.value = nombreCliente
 
+          
+    }
     const handleSubmit = (data) => {
         data.estado = 1
-        UsuarioService.agregarUsuario(data)
+        mascotaService.actualizarMascota(data)
             .then(respuesta => {
                 console.log(respuesta)
                 // Redireccionar
@@ -41,99 +60,157 @@
             <div class="mx-auto md:w-2/3 py-20 px-6">
                 <FormKit
                     type="form"
-                    submit-label="Agregar Usuario"
+                    submit-label="Agregar Mascota"
                     incomplete-message="No se pudo enviar, revisa los mensajes"
                     @submit="handleSubmit"
                 >
+                <!-- Nombre -->
                     <FormKit 
                         type="text"
                         label="Nombre"
                         name="nombre"
-                        placeholder="Nombre de usuario"
+                        placeholder="Nombre de las mascota"
                         validation="required"
-                        :validation-messages="{ required: 'El Nombre del Cliente es Obligatorio' }"
+                        :validation-messages="{ required: 'El Nombre de la mascota es obligatorio.' }"
                     />
-
-                    <FormKit 
-                        type="text"
-                        label="Apellido"
-                        name="apellido"
-                        placeholder="Apellido del usuario"
-                        validation="required"
-                        :validation-messages="{ required: 'El Apellido del Cliente es Obligatorio' }"
-                    
-                    />
-
-                    <FormKit 
-                        type="text"
-                        label="Número Celular"
-                        name="numero_celular"
-                        placeholder="Teléfono: XXX-XXX-XXXX"
-                    />
-
-                    <FormKit 
-                        type="text"
-                        label="Email"
-                        name="email"
-                        placeholder="Email de Cliente"
-                        validation="required|email"
-                        :validation-messages="{ required: 'El Email del Cliente es Obligatorio', email: 'Coloca un email válido' }"
-                    />
-
-
-                    <FormKit 
-                        type="text"
-                        name="direccion"
-                        label="Direccion"
-                        placeholder="Cra #123"
-                        :validation-messages="{ required: 'La dirección es Obligatoria' }"
-                    
-                    />
-                    <FormKit 
-                        type="date"
-                        name="fecha_nacimiento"
-                        label="Fecha Nacimiento"
-                        :validation-messages="{ required: 'La fecha de nacimiento es obligatoria' }"
-
-                    />
+                <!-- Tipo de mascota -->
                     <FormKit 
                         type="select"
-                        name="rol"
-                        label="Rol"
+                        name="tipo_mascota"
+                        label="Tipo de mascota"
                         :options="[
-                            'Recepcionista',
-                            'Médico',
-                            'Auxiliar'
+                            'Perro',
+                            'Gato',
+                            'Hámster',
+                            'Ave',
+                            'Pez',
+                            'Reptil',
+                            'Invertebrado',
+                            'Conejo',
                         ]"
-                        :validation-messages="{ required: 'El rol es obligatorio' }"
+                        :validation-messages="{ required: 'El tipo de mascota es obligatorio' }"
+                    />
+                <!-- Genero  -->
+                    <FormKit 
+                        type="select"
+                        name="genero"
+                        label="Genero"
+                        :options="[
+                            'Hembra',
+                            'Macho'
+                        ]"
+                        :validation-messages="{ required: 'El genero es obligatorio' }"
+                        />
+                <!-- Raza -->
+                    <FormKit 
+                        type="text"
+                        label="Raza"
+                        name="raza"
+                        placeholder="Raza de la mascota"
+                        :validation-messages="{ required: 'La raza es obligatoria' }"
+                    />
+                <!-- Tamaño -->
+                    <FormKit 
+                        type="text"
+                        label="Tamaño"
+                        name="tamaño"
+                        placeholder="Tamaño de la mascota"
+                        :validation-messages="{ required: 'El tamaño es obligatorio' }"
+
+                    />
+                <!-- Peso -->
+                    <FormKit 
+                        type="text"
+                        label="Peso"
+                        name="peso"
+                        placeholder="Peso de la mascota"
+                        validation="required|email"
+                        :validation-messages="{ required: 'El peso de la mascota es obligatoria'}"
                     />
 
+                <!-- Vacunas -->
                     <FormKit 
-                        type="checkbox"
-                        name="isAdmin"
-                        label="¿Es Admin?"
-                        help="Esta persona tendrá muchos privilegios, ten cuidado con esta decisión."
-                        :value="true"
-                        :validation-messages="{ required: 'Este campo es obligatorio' }"
+                        type="text"
+                        name="vacunas"
+                        label="Vacunas"
+                        placeholder="Vacuna de las mascotas"
+                        :validation-messages="{ required: 'Las vacunas de la mascota es Obligatoria' }"
                     />
+                <!-- Tratamiento -->
+                    <FormKit 
+                        type="text"
+                        name="tratamiento"
+                        label="Tratamiento"
+                        placeholder="Tratamiento de la mascotas"
+                    />
+                <!-- Formula médica -->
+                    <FormKit 
+                        type="text"
+                        name="formula_medica"
+                        label="Formula médica"
+                        placeholder="Formula médica de la mascota"
+                    />
+                <!-- Diagnostico -->
+                    <FormKit 
+                        type="textarea"
+                        name="diagnostico"
+                        auto-height
+                        label="Diagnostico"
+                        placeholder="Diagnostico de la mascota"
+                    />
+                <!-- Medicamentos -->
+                    <FormKit 
+                        type="text"
+                        name="medicamentos"
+                        label="Medicamentos"
+                        placeholder="Medicamentos de la mascota"
+                    />  
+               <!-- Patologias -->
+                    <FormKit 
+                        type="text"
+                        name="patologias"
+                        label="Patologias"
+                        placeholder="Patologias de la mascota"
+                    /> 
+                    
+                    <FormKit 
+                        type="select"
+                        name="tipo_mascota"
+                        label="Tipo de mascota"
+                        :options="[
+                            'Perro',
+                            'Gato',
+                            'Hámster',
+                            'Ave',
+                            'Pez',
+                            'Reptil',
+                            'Invertebrado',
+                            'Conejo',
+                        ]"
+                        :validation-messages="{ required: 'El tipo de mascota es obligatorio' }"
+                    />
+                    <!-- Buscar usuarios -->
+                    <FormKit
+                        type="form"
+                        submit-label="Buscar Cliente"
+                        incomplete-message="No se pudo buscar el cliente."
+                        @submit="buscarCliente"
+                    >
+                        <FormKit
+                            type="search"
+                            placeholder="Buscar.."
+                            label="Buscar Cliene"
+                            value=""
+                        />
 
-                    <FormKit 
-                        type="checkbox"
-                        name="isActive"
-                        label="Activado"
-                        :value="true"
-                        validation-visibility="dirty"
-                        :validation-messages="{ required: 'El estado es obligatorio' }"
-                    />
+                    </FormKit>
+                        <div
+                            v-if="newCliente.length > 0"
+                            class=""
+                        >
+                        {{ nombreCliente }}
+                        </div>
 
-                    <FormKit 
-                        type="password"
-                        name="contraseña"
-                        label="Contraseña"
-                        placeholder="Ingresa tu contraseña"
-                        help="Una que recuerdes"
-                        :validation-messages="{ required: 'La contraseña es obligatoria' }"
-                    />
                 </FormKit>
             </div>
         </div>

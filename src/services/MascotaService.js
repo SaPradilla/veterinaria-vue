@@ -1,16 +1,16 @@
 import api from "../lib/axios";
 
 export default {
-    obtenerUsuarios() {
+    obtenerMascotas() {
         return api.get('/admin/list/pet/all')
     },
-    agregarUsuario(data) {
+    agregarMascota(data) {
         return api.post('/admin/register/pet', data)
     },
-    obtenerUsuario(id) {
+    obtenerMascota(id) {
         return api.get('/admin/list/pet/' + id)
     },
-    actualizarUsuario(id, data) {
+    actualizarMascota(id, data) {
        return api.put('/admin/edit/pet/' + id,data)
     }
 }

@@ -23,13 +23,13 @@
         <div class="flex justify-center p-5 mr-8 space-x-10 ">
 
             <RouterLink class="bg-cyan-600 hover:bg-cyan-500 " to="clientes">
-                Crud Clientes
+                Modulo Clientes
             </RouterLink>
             <RouterLink class="bg-cyan-600 hover:bg-cyan-500 " to="usuarios">
-                Crud Usuarios
+                Modulo Usuarios
             </RouterLink>
             <RouterLink class="bg-cyan-600 hover:bg-cyan-500 " to="mascotas">
-                Crud Mascota
+                Modulo Mascota
             </RouterLink>
         </div>
      

@@ -33,7 +33,7 @@
             <RouterLink to="inicio">
                 Volver
             </RouterLink>
-            <RouterLink to="agregar-usuario">
+            <RouterLink to="agregar-mascota">
                 Agregar Usuario
             </RouterLink>
         </div>
